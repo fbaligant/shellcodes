@@ -1,0 +1,3 @@
+Linux/x86 open() + getdents() shellcode
+
+Python tool to decode the getdents() structure on the receiving side
